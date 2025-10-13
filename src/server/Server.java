@@ -68,7 +68,7 @@ public class Server {
         for (ClientHandler handler : clients.values()) {
             // Envia a mensagem apenas se não for o próprio remetente
             if (handler != senderHandler) {
-                handler.sendMessage(message);
+                handler.send(message);
             }
         }
     }

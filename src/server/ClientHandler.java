@@ -1,5 +1,8 @@
     package server;
 
+    import protocol.CommandContext;
+    import protocol.CommandHandler;
+
     import java.io.BufferedReader;
     import java.io.IOException;
     import java.io.InputStreamReader;
@@ -11,7 +14,7 @@
      * Manipula a comunicação com um único cliente.
      * Cada instância desta classe é executada em sua própria thread.
      */
-    public class ClientHandler implements Runnable {
+    public class ClientHandler implements Runnable, CommandContext {
 
         private final Socket clientSocket;
         private PrintWriter out;
@@ -29,27 +32,15 @@
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                // 1. Lógica de Login
+                // 1. Inicializa tratador de comandos e pergunta por login
                 out.println(">>> Bem-vindo ao chat! Por favor, digite seu nome de usuario:");
-                this.username = in.readLine();
+                CommandHandler handler = new ServerCommandHandler(this);
 
-                // Adiciona o cliente ao mapa do servidor
-                Server.addClient(this.username, this);
-                System.out.println(this.username + " logou.");
-
-                // Informa aos outros usuários que um novo cliente entrou
-                String loginMessage = ">>> " + this.username + " entrou no chat.";
-                Server.broadcastMessage(loginMessage, this);
-                out.println(">>> Olá, " + this.username + "! Você está conectado.");
-
-                // 2. Loop principal de leitura de mensagens
+                // 2. Processamento de mensagens do cliente
                 String clientMessage;
                 while ((clientMessage = in.readLine()) != null) {
-                    String broadcastMessage = "[" + this.username + "]: " + clientMessage;
-                    System.out.println("Mensagem recebida de " + this.username + ": " + clientMessage);
-                    Server.broadcastMessage(broadcastMessage, this);
+                    handler.handle(clientMessage);
                 }
-
             } catch (SocketException e) {
                 System.out.println("Cliente " + (username != null ? username : "") + " desconectou abruptamente.");
             } catch (IOException e) {
@@ -66,10 +57,7 @@
                     }
 
                     // Fecha os recursos
-                    if (in != null) in.close();
-                    if (out != null) out.close();
-                    if (clientSocket != null) clientSocket.close();
-
+                    stop();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -77,18 +65,21 @@
         }
 
         public void stop() throws IOException {
-            in.close();
-            out.close();
-            clientSocket.close();
+            if (in != null) in.close();
+            if (out != null) out.close();
+            if (clientSocket != null) clientSocket.close();
         }
 
         /**
          * Envia uma mensagem para este cliente específico.
          * @param message A mensagem a ser enviada.
          */
-        public void sendMessage(String message) {
+        public void send(String message) {
             if (out != null) {
                 out.println(message);
             }
         }
+
+        public void setUsername(String username) { this.username = username; }
+        public String getUsername() { return username; }
     }

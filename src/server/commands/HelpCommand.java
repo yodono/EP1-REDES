@@ -22,10 +22,13 @@ public class HelpCommand implements Command {
 
     @Override
     public void execute(ParsedCommand cmd, CommandContext ctx) {
-        StringBuilder sb = new StringBuilder(">>> Comandos disponíveis:\n");
+        StringBuilder sb = new StringBuilder(">>> Comandos disponíveis:\\n");
         for (Command c : registry.all()) {
-            sb.append(" - ").append(c.name()).append(" - ").append(c.description()).append("\n");
+            sb.append(" - ").append(c.name()).append(" - ").append(c.description()).append("\\n");
         }
-        ctx.send(sb.toString());
+        ctx.send("/msg " + sb);
     }
+
+    @Override
+    public int expectedArgs() { return 0; }
 }

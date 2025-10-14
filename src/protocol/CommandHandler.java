@@ -15,13 +15,13 @@ public abstract class CommandHandler {
     }
 
     public void handle(String input) {
-        ParsedCommand cmd = CommandParser.parse(input);
+        ParsedCommand cmd = CommandParser.parse(input, registry);
         Command command = registry.get(cmd.name());
 
         if (!precondition(cmd)) return;
 
         if (command == null) {
-            ctx.send(">>> Comando desconhecido. Use /help para ver a lista.");
+            ctx.send("/msg Comando desconhecido. Use /help para ver a lista.");
             return;
         }
 

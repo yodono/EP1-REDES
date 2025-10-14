@@ -18,13 +18,23 @@ public class LoginCommand implements Command {
     public void execute(ParsedCommand cmd, CommandContext ctx) {
         String username = cmd.arg(0);
         if (username == null || username.isBlank()) {
-            ctx.send("Uso: /login <nome_usuario>");
+            ctx.send("/msg Uso: /login <nome_usuario>");
             return;
         }
 
         ClientHandler client = (ClientHandler) ctx;
+
+        if (client.getUsername() != null) {
+            ctx.send("/msg Já está logado.");
+            return;
+        }
+
         client.setUsername(username);
         Server.addClient(username, client);
-        ctx.send("Login realizado com sucesso como " + username + "!");
+        ctx.send("/loginok " + username);
+        ctx.send("/msg Login realizado com sucesso como " + username + "!");
     }
+
+    @Override
+    public int expectedArgs() { return 1; }
 }

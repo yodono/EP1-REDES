@@ -18,12 +18,15 @@ public class MsgCommand implements Command {
     public void execute(ParsedCommand cmd, CommandContext ctx) {
         String msg = cmd.arg(0);
         if (msg == null || msg.isBlank()) {
-            ctx.send("Uso: /all <mensagem>");
+            ctx.send("/msg Uso: /all <mensagem>");
             return;
         }
 
         ClientHandler client = (ClientHandler) ctx;
-        String broadcastMessage = "[" + client.getUsername() + "]: " + msg;
+        String broadcastMessage = "/msg [" + client.getUsername() + "]: " + msg;
         Server.broadcastMessage(broadcastMessage, client);
     }
+
+    @Override
+    public int expectedArgs() { return 1; }
 }

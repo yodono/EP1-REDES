@@ -33,7 +33,7 @@
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 // 1. Inicializa tratador de comandos e pergunta por login
-                out.println(">>> Bem-vindo ao chat! Por favor, digite seu nome de usuario:");
+                send("/msg Bem-vindo ao chat! Por favor, digite seu nome de usuario:");
                 CommandHandler handler = new ServerCommandHandler(this);
 
                 // 2. Processamento de mensagens do cliente
@@ -51,9 +51,9 @@
                     // Informa a todos que o usuário saiu
                     if (username != null) {
                         Server.removeClient(username);
-                        String logoutMessage = ">>> " + username + " saiu do chat.";
-                        System.out.println(logoutMessage);
-                        Server.broadcastMessage(logoutMessage, this);
+                        String logoutMessage = username + " saiu do chat.";
+                        System.out.println(">>> " + logoutMessage);
+                        Server.broadcastMessage("/msg " + logoutMessage, this);
                     }
 
                     // Fecha os recursos
@@ -72,7 +72,6 @@
 
         /**
          * Envia uma mensagem para este cliente específico.
-         * @param message A mensagem a ser enviada.
          */
         public void send(String message) {
             if (out != null) {

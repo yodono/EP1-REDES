@@ -5,8 +5,6 @@ import com.kevydn.redes.protocol.CommandContext;
 import com.kevydn.redes.protocol.ParsedCommand;
 import com.kevydn.redes.server.audio.AudioStreamer;
 
-import java.io.IOException;
-
 public class PlayCommand implements Command {
 
     @Override
@@ -23,12 +21,7 @@ public class PlayCommand implements Command {
             return;
         }
 
-        try {
-            new Thread(new AudioStreamer("/audio/songs/" + songName)).start();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            ctx.send("/msg Erro ao tentar reproduzir " + songName + ". Tente novamente mais tarde.");
-        }
+        new Thread(new AudioStreamer("audio/songs/" + songName)).start();
     }
 
     @Override

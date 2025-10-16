@@ -1,55 +1,61 @@
 package com.kevydn.redes.client.audio;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AudioStreamPlayer implements Runnable {
+    private final int CHUNK_SIZE = 4096; // tentativa de reduzir ruido aumentando o buffer (era 1024)
 
     @Override
     public void run() {
-        try (DatagramSocket serverSocket = new DatagramSocket(4445)) {
+        try (DatagramSocket socket = new DatagramSocket(4445)) {
             System.out.println("UDP escutando na porta " + 4445);
 
-            byte[] receiveData = new byte[1024]; // Buffer para dados recebidos
-            Map<Integer, StringBuilder> packetMap = new HashMap<>(); // Mapeia os pacotes pela sequência
+            // Precisa parear com o MESMO AudioFormat do server
+            // TODO receber esses valores por mensagem do servidor ao inves de hardcoded? da certo?
+            AudioFormat format = new AudioFormat(
+                    44100.0f, // taxa
+                    16, // tamanho
+                    2,        // canais (stereo)
+                    true,     // com sinal
+                    false     // little endian
+            );
+
+            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+            SourceDataLine speaker = (SourceDataLine) AudioSystem.getLine(info);
+
+            // tentativa de reduzir ruido aumentando o buffer de playback (SrouceDataLine)
+            int playbackBufferSize = 4096 * 4; // Example: 16 KB buffer
+            speaker.open(format, playbackBufferSize);
+            speaker.open(format);
+            speaker.start();
+
+            byte[] buffer = new byte[CHUNK_SIZE];
 
             while (true) {
-                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                serverSocket.receive(receivePacket); // Bloqueia até um pacote ser recebido
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
 
-                // Extrai dados do pacote recebido
-                String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                // comenta buffer compartilhado
+                // byte[] audioData = packet.getData();
+                // int length = packet.getLength();
 
-                // Extrai número da sequência e total de pacotes
-                int seqStart = receivedMessage.indexOf("SEQ:") + 4;
-                int seqEnd = receivedMessage.indexOf(" ", seqStart);
-                String seqInfo = receivedMessage.substring(seqStart, seqEnd);
-                String[] seqParts = seqInfo.split("/");
-                int currentSeq = Integer.parseInt(seqParts[0]);
-                int totalPackets = Integer.parseInt(seqParts[1]);
+                // tentativa de reduzir ruido, copiando apenas a parte do buffer que interessa
+                int length = packet.getLength();
+                byte[] audioData = new byte[length];
+                System.arraycopy(packet.getData(), 0, audioData, 0, length);
 
-                // Obtém o conteúdo da mensagem (sem o cabeçalho)
-                String content = receivedMessage.substring(seqEnd + 1);
-
-                // Adiciona o conteúdo ao map de pacotes
-                packetMap.putIfAbsent(currentSeq, new StringBuilder());
-                packetMap.get(currentSeq).append(content);
-
-                // Verifica se todos os pacotes foram recebidos
-                if (packetMap.size() == totalPackets) {
-                    StringBuilder fullMessage = new StringBuilder();
-                    for (int i = 0; i < totalPackets; i++) {
-                        fullMessage.append(packetMap.get(i));
-                    }
-
-                    System.out.println("Mensagem reconstruída: " + fullMessage);
-                    packetMap.clear(); // Limpa os pacotes recebidos para próxima transmissão
-                }
+                // Escreve no speaker (API Java para reproduzir som)
+                // Usa o byte array "limpo" que foi copiado
+                speaker.write(audioData, 0, length);
             }
-        } catch (IOException e) {
+        } catch (IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
     }

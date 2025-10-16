@@ -26,4 +26,7 @@ public class ServerResponseHandler extends CommandHandler {
         registry.register(new LoginOKCommand());
         registry.register(new MsgCommand());
     }
+
+    @Override
+    protected void handleUnknown() {}
 }

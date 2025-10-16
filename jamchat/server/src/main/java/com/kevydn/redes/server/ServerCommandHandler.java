@@ -30,4 +30,9 @@ public class ServerCommandHandler extends CommandHandler {
         }
         return true;
     }
+
+    @Override
+    protected void handleUnknown() {
+        ctx.send("/msg Comando desconhecido. Use /help para ver a lista.");
+    }
 }

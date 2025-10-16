@@ -18,16 +18,17 @@ public abstract class CommandHandler {
         ParsedCommand cmd = CommandParser.parse(input, registry);
         Command command = registry.get(cmd.name());
 
-        if (!precondition(cmd)) return;
-
         if (command == null) {
-            ctx.send("/msg Comando desconhecido. Use /help para ver a lista.");
+            handleUnknown();
             return;
         }
+        if (!precondition(cmd)) return;
 
         command.execute(cmd, ctx);
     }
 
+    // TODO mover precondition para cada comando?? por exemplo play command no client
     protected abstract Boolean precondition(ParsedCommand cmd);
     protected abstract void registerCommands();
+    protected abstract void handleUnknown();
 }

@@ -24,4 +24,7 @@ public class ClientCommandHandler extends CommandHandler {
     protected void registerCommands() {
         registry.register(new PlayCommand());
     }
+
+    @Override
+    protected void handleUnknown() {}
 }

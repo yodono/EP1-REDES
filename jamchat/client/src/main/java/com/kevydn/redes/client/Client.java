@@ -1,6 +1,5 @@
 package com.kevydn.redes.client;
 
-import com.kevydn.redes.client.audio.AudioPlayer;
 import com.kevydn.redes.protocol.CommandContext;
 import com.kevydn.redes.protocol.CommandHandler;
 
@@ -40,16 +39,13 @@ public class Client implements CommandContext {
             new Thread(new ServerListener(in, serverHandler)).start();
 
             Scanner scanner = new Scanner(System.in);
+            CommandHandler clientHandler = new ClientCommandHandler(this);
             while (true) { // Loop principal de envio de mensagens
                 String message = scanner.nextLine();
                 if (message.equalsIgnoreCase("/sair")) break;
 
-                // test audio do cliente
-                if (message.equalsIgnoreCase("/play")) {
-                    new AudioPlayer().play("audio/arcticmonkeys/acertainromance.mp3");
-                    continue;
-                }
-
+                // TODO distinguir comandos client-side only para server side
+                clientHandler.handle(message);
                 send(message);
             }
 

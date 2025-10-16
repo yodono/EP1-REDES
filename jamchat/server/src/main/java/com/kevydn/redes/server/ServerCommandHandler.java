@@ -6,6 +6,7 @@ import com.kevydn.redes.protocol.ParsedCommand;
 import com.kevydn.redes.server.commands.HelpCommand;
 import com.kevydn.redes.server.commands.LoginCommand;
 import com.kevydn.redes.server.commands.MsgCommand;
+import com.kevydn.redes.server.commands.PlayCommand;
 
 public class ServerCommandHandler extends CommandHandler {
 
@@ -17,6 +18,7 @@ public class ServerCommandHandler extends CommandHandler {
     protected void registerCommands() {
         registry.register(new LoginCommand());
         registry.register(new MsgCommand());
+        registry.register(new PlayCommand());
         registry.register(new HelpCommand(registry));
     }
 

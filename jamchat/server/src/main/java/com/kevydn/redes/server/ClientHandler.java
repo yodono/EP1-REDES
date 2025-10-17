@@ -1,6 +1,6 @@
     package com.kevydn.redes.server;
 
-    import com.kevydn.redes.protocol.CommandContext;
+    import com.kevydn.redes.protocol.NetworkContext;
     import com.kevydn.redes.protocol.CommandHandler;
 
     import java.io.BufferedReader;
@@ -14,7 +14,7 @@
      * Manipula a comunicação com um único cliente.
      * Cada instância desta classe é executada em sua própria thread.
      */
-    public class ClientHandler implements Runnable, CommandContext {
+    public class ClientHandler implements Runnable, NetworkContext {
 
         private final Socket clientSocket;
         private PrintWriter out;

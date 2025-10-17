@@ -2,7 +2,8 @@ package com.kevydn.redes.client.commands;
 
 import com.kevydn.redes.client.audio.AudioStreamPlayer;
 import com.kevydn.redes.protocol.Command;
-import com.kevydn.redes.protocol.CommandContext;
+import com.kevydn.redes.protocol.MessageObserver;
+import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
 
 public class PlayCommand implements Command {
@@ -14,7 +15,7 @@ public class PlayCommand implements Command {
     public String description() { return "Toca uma música"; }
 
     @Override
-    public void execute(ParsedCommand cmd, CommandContext ctx) {
+    public void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver messageObserver) {
         new Thread(new AudioStreamPlayer()).start();
     }
 

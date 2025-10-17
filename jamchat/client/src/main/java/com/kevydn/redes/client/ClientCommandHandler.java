@@ -1,7 +1,7 @@
 package com.kevydn.redes.client;
 
 import com.kevydn.redes.client.commands.PlayCommand;
-import com.kevydn.redes.protocol.CommandContext;
+import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.ParsedCommand;
 
@@ -11,7 +11,7 @@ import com.kevydn.redes.protocol.ParsedCommand;
  */
 public class ClientCommandHandler extends CommandHandler {
 
-    public ClientCommandHandler(CommandContext ctx) {
+    public ClientCommandHandler(NetworkContext ctx) {
         super(ctx);
     }
 

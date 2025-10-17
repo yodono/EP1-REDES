@@ -2,7 +2,8 @@ package com.kevydn.redes.client;
 
 import com.kevydn.redes.client.commands.LoginOKCommand;
 import com.kevydn.redes.client.commands.MsgCommand;
-import com.kevydn.redes.protocol.CommandContext;
+import com.kevydn.redes.protocol.MessageObserver;
+import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.ParsedCommand;
 
@@ -12,8 +13,8 @@ import com.kevydn.redes.protocol.ParsedCommand;
  */
 public class ServerResponseHandler extends CommandHandler {
 
-    public ServerResponseHandler(CommandContext ctx) {
-        super(ctx);
+    public ServerResponseHandler(NetworkContext ctx, MessageObserver listener) {
+        super(ctx, listener);
     }
 
     @Override

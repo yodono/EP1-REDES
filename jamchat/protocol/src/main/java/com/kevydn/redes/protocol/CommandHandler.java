@@ -6,11 +6,20 @@ package com.kevydn.redes.protocol;
 public abstract class CommandHandler {
 
     protected final CommandRegistry registry;
-    protected final CommandContext ctx;
+    protected final NetworkContext networkContext;
+    protected final MessageObserver messageObserver;
 
-    public CommandHandler(CommandContext ctx) {
-        this.ctx = ctx;
+    public CommandHandler(NetworkContext networkContext) {
+        this.networkContext = networkContext;
         this.registry = new CommandRegistry();
+        this.messageObserver = null;
+        registerCommands();
+    }
+
+    public CommandHandler(NetworkContext networkContext, MessageObserver messageObserver) {
+        this.networkContext = networkContext;
+        this.registry = new CommandRegistry();
+        this.messageObserver = messageObserver;
         registerCommands();
     }
 
@@ -24,7 +33,7 @@ public abstract class CommandHandler {
         }
         if (!precondition(cmd)) return;
 
-        command.execute(cmd, ctx);
+        command.execute(cmd, networkContext, messageObserver);
     }
 
     // TODO mover precondition para cada comando?? por exemplo play command no client

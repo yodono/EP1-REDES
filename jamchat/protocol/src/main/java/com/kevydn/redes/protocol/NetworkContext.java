@@ -1,9 +1,9 @@
 package com.kevydn.redes.protocol;
 
 /**
- * Interface que abstrai ambiente em que o comando será executado
+ * Interface que abstrai ambiente de network
  */
-public interface CommandContext {
+public interface NetworkContext {
     void send(String message);
     String getUsername();
 }

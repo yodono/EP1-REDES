@@ -1,9 +1,6 @@
 package com.kevydn.redes.server.commands;
 
-import com.kevydn.redes.protocol.Command;
-import com.kevydn.redes.protocol.CommandContext;
-import com.kevydn.redes.protocol.CommandRegistry;
-import com.kevydn.redes.protocol.ParsedCommand;
+import com.kevydn.redes.protocol.*;
 
 public class HelpCommand implements Command {
 
@@ -20,7 +17,7 @@ public class HelpCommand implements Command {
     public String description() { return "Mostra esta lista de comandos."; }
 
     @Override
-    public void execute(ParsedCommand cmd, CommandContext ctx) {
+    public void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver messageObserver) {
         StringBuilder sb = new StringBuilder(">>> Comandos disponíveis:\\n");
         for (Command c : registry.all()) {
             sb.append(" - ").append(c.name()).append(" - ").append(c.description()).append("\\n");

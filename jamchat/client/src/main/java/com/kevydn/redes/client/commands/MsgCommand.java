@@ -1,8 +1,9 @@
 package com.kevydn.redes.client.commands;
 
-import com.kevydn.redes.client.Client;
+import com.kevydn.redes.client.ClientNetwork;
 import com.kevydn.redes.protocol.Command;
-import com.kevydn.redes.protocol.CommandContext;
+import com.kevydn.redes.protocol.MessageObserver;
+import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
 
 public class MsgCommand implements Command {
@@ -14,12 +15,14 @@ public class MsgCommand implements Command {
     public String description() { return "Recebe uma mensagem do servidor"; }
 
     @Override
-    public void execute(ParsedCommand cmd, CommandContext ctx) {
+    public void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver observer) {
         String msg = cmd.arg(0);
         assert msg != null;
         msg = msg.replace("\\n", "\n");
-        Client client = (Client) ctx;
-        client.out(msg);
+
+        if (observer != null) {
+            observer.onMessageReceived(msg);
+        }
     }
 
     @Override

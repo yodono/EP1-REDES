@@ -1,6 +1,6 @@
 package com.kevydn.redes.server;
 
-import com.kevydn.redes.protocol.CommandContext;
+import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.ParsedCommand;
 import com.kevydn.redes.server.commands.HelpCommand;
@@ -10,7 +10,7 @@ import com.kevydn.redes.server.commands.PlayCommand;
 
 public class ServerCommandHandler extends CommandHandler {
 
-    public ServerCommandHandler(CommandContext ctx) {
+    public ServerCommandHandler(NetworkContext ctx) {
         super(ctx);
     }
 
@@ -24,8 +24,8 @@ public class ServerCommandHandler extends CommandHandler {
 
     @Override
     protected Boolean precondition(ParsedCommand cmd) {
-        if (ctx.getUsername() == null && !cmd.name().equals("/login")) {
-            ctx.send("/msg Você precisa fazer login antes de usar outros comandos.");
+        if (networkContext.getUsername() == null && !cmd.name().equals("/login")) {
+            networkContext.send("/msg Você precisa fazer login antes de usar outros comandos.");
             return false;
         }
         return true;
@@ -33,6 +33,6 @@ public class ServerCommandHandler extends CommandHandler {
 
     @Override
     protected void handleUnknown() {
-        ctx.send("/msg Comando desconhecido. Use /help para ver a lista.");
+        networkContext.send("/msg Comando desconhecido. Use /help para ver a lista.");
     }
 }

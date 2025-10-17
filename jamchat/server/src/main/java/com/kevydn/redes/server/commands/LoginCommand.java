@@ -1,7 +1,8 @@
 package com.kevydn.redes.server.commands;
 
 import com.kevydn.redes.protocol.Command;
-import com.kevydn.redes.protocol.CommandContext;
+import com.kevydn.redes.protocol.MessageObserver;
+import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
 import com.kevydn.redes.server.ClientHandler;
 import com.kevydn.redes.server.Server;
@@ -15,7 +16,7 @@ public class LoginCommand implements Command {
     public String description() { return "Faz login: /login <nome_usuario>"; }
 
     @Override
-    public void execute(ParsedCommand cmd, CommandContext ctx) {
+    public void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver messageObserver) {
         String username = cmd.arg(0);
         if (username == null || username.isBlank()) {
             ctx.send("/msg Uso: /login <nome_usuario>");

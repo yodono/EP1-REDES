@@ -30,6 +30,7 @@ public class ClientUIManager implements MessageObserver {
 
     /** Chamado pela janela quando o usuário envia uma mensagem */
     public void onUserMessage(String message) {
+        if (!message.startsWith("/")) message = "/all " + message;
         network.send(message);
     }
 

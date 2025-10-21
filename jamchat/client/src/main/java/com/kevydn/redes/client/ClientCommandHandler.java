@@ -1,12 +1,12 @@
 package com.kevydn.redes.client;
 
-import com.kevydn.redes.client.commands.PlayCommand;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.ParsedCommand;
 
 /**
- * Interpreta e executa comandos vindos do servidor.
+ * TODO sem uso por enquanto, ja que mudamos a logica de play. Remover?
+ * Interpreta e executa comandos do cliente, para o cliente (comandos locais).
  * Usa a mesma infraestrutura de protocolo do servidor.
  */
 public class ClientCommandHandler extends CommandHandler {
@@ -21,9 +21,7 @@ public class ClientCommandHandler extends CommandHandler {
     }
 
     @Override
-    protected void registerCommands() {
-        registry.register(new PlayCommand());
-    }
+    protected void registerCommands() {}
 
     @Override
     protected void handleUnknown() {}

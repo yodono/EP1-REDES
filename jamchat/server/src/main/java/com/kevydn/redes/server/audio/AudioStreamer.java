@@ -14,9 +14,11 @@ import java.net.InetAddress;
 public class AudioStreamer implements Runnable {
     private final int CHUNK_SIZE = 4096; // tentativa de reduzir ruido aumentando o buffer (era 1024)
     private final String filePath;
+    private final int port;
 
-    public AudioStreamer(String filePath) {
+    public AudioStreamer(String filePath, int port) {
         this.filePath = filePath;
+        this.port = port;
     }
 
     @Override
@@ -30,7 +32,6 @@ public class AudioStreamer implements Runnable {
             }
 
             InetAddress clientAddress = InetAddress.getByName("localhost");
-            int clientPort = 4445;
 
             // mark/reset erro com InputStream direto, usando o BufferedInputStream resolve
             BufferedInputStream bufferedStream = new BufferedInputStream(rawAudioStream);
@@ -44,7 +45,7 @@ public class AudioStreamer implements Runnable {
             int bytesRead;
 
             while ((bytesRead = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
-                DatagramPacket packet = new DatagramPacket(buffer, bytesRead, clientAddress, clientPort);
+                DatagramPacket packet = new DatagramPacket(buffer, bytesRead, clientAddress, port);
                 socket.send(packet);
 
                 System.out.println("Chunk enviado de tamanho: " + bytesRead);

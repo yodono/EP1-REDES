@@ -1,5 +1,6 @@
 package com.kevydn.redes.client;
 
+import com.kevydn.redes.client.commands.JoinJamCommand;
 import com.kevydn.redes.client.commands.LoginOKCommand;
 import com.kevydn.redes.client.commands.MsgCommand;
 import com.kevydn.redes.protocol.MessageObserver;
@@ -26,6 +27,7 @@ public class ServerResponseHandler extends CommandHandler {
     protected void registerCommands() {
         registry.register(new LoginOKCommand());
         registry.register(new MsgCommand());
+        registry.register(new JoinJamCommand());
     }
 
     @Override

@@ -12,12 +12,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * para cada cliente conectado.
  */
 public class Server {
+    // TODO receber porta por args
     // Porta em que o servidor ficará escutando.
     private static final int PORT = 12345;
 
-    // Mapa para armazenar os manipuladores de cliente conectados, associando username ao handler.
-    // Usamos ConcurrentHashMap para segurança em ambientes multithreaded.
+    // (username, handler)
     private static final Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
+
+    // (songName, port)
+    private static final Map<String, Integer> jams = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -71,5 +74,30 @@ public class Server {
                 handler.send(message);
             }
         }
+    }
+
+    /**
+     * Adiciona uma música ao map de jams atualmente em progresso.
+     * @param songName O nome da música a ser tocada.
+     */
+    public static void addJam(String songName) {
+        jams.put(songName, createJamPort());
+    }
+
+    public static void removeJam(String songName) {
+        jams.remove(songName);
+    }
+
+    public static boolean hasJam(String songName) {
+        return jams.containsKey(songName);
+    }
+
+    public static int getJamPort(String songName) {
+        return jams.get(songName);
+    }
+
+    private static int createJamPort() {
+        // TODO isso aqui basta? talvez ter um comando para ver se a porta esta em uso e pegar um outro valor
+        return jams.values().stream().sorted().toList().getLast() + 1;
     }
 }

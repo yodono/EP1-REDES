@@ -4,6 +4,7 @@ import com.kevydn.redes.protocol.Command;
 import com.kevydn.redes.protocol.MessageObserver;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
+import com.kevydn.redes.server.Server;
 import com.kevydn.redes.server.audio.AudioStreamer;
 
 public class PlayCommand implements Command {
@@ -22,7 +23,15 @@ public class PlayCommand implements Command {
             return;
         }
 
-        new Thread(new AudioStreamer("audio/songs/" + songName)).start();
+        if (Server.hasJam(songName)) {
+            ctx.send("/join_jam " + Server.getJamPort(songName));
+            return;
+        }
+
+        Server.addJam(songName);
+        int port = Server.getJamPort(songName);
+        new Thread(new AudioStreamer("audio/songs/" + songName, port)).start();
+        ctx.send("/join_jam " + port);
     }
 
     @Override

@@ -11,11 +11,16 @@ import java.net.DatagramSocket;
 
 public class AudioStreamPlayer implements Runnable {
     private final int CHUNK_SIZE = 4096; // tentativa de reduzir ruido aumentando o buffer (era 1024)
+    private final int port;
+
+    public AudioStreamPlayer(int port) {
+        this.port = port;
+    }
 
     @Override
     public void run() {
-        try (DatagramSocket socket = new DatagramSocket(4445)) {
-            System.out.println("UDP escutando na porta " + 4445);
+        try (DatagramSocket socket = new DatagramSocket(port)) {
+            System.out.println("UDP escutando na porta " + port);
 
             // Precisa parear com o MESMO AudioFormat do server
             // TODO receber esses valores por mensagem do servidor ao inves de hardcoded? da certo?

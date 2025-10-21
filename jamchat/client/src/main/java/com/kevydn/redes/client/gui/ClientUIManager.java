@@ -1,6 +1,8 @@
 package com.kevydn.redes.client.gui;
 
+import com.kevydn.redes.client.ClientCommandHandler;
 import com.kevydn.redes.client.ClientNetwork;
+import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.MessageObserver;
 
 import javax.swing.SwingUtilities;
@@ -11,9 +13,11 @@ import javax.swing.SwingUtilities;
 public class ClientUIManager implements MessageObserver {
     private final ClientNetwork network;
     private BasicWindow window;
+    private CommandHandler clientCommandHandler;
 
     public ClientUIManager(ClientNetwork network) {
         this.network = network;
+        this.clientCommandHandler = new ClientCommandHandler(network);
     }
 
     public void startUI() {
@@ -31,6 +35,7 @@ public class ClientUIManager implements MessageObserver {
     /** Chamado pela janela quando o usuário envia uma mensagem */
     public void onUserMessage(String message) {
         if (!message.startsWith("/")) message = "/all " + message;
+        clientCommandHandler.handle(message);
         network.send(message);
     }
 

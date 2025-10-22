@@ -102,6 +102,6 @@ public class Server {
         if (jams.isEmpty()) return 4000;
 
         // Vai criar portas novas para cada streaming de jam, 4001, 4002, 4003, etc...
-        return jams.values().stream().sorted().toList().get(jams.size()) + 1;
+        return jams.values().stream().sorted().toList().get(jams.size() - 1) + 1;
     }
 }

@@ -30,7 +30,7 @@ public class PlayCommand implements Command {
 
         Server.addJam(songName);
         int port = Server.getJamPort(songName);
-        new Thread(new AudioStreamer("audio/songs/" + songName, port)).start();
+        new Thread(new AudioStreamer(songName, port)).start();
         ctx.send("/join_jam " + port);
     }
 

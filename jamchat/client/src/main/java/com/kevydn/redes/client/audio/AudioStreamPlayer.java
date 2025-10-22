@@ -19,6 +19,8 @@ public class AudioStreamPlayer implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Conectando UDP na porta " + port);
+
         try (DatagramSocket socket = new DatagramSocket(port)) {
             System.out.println("UDP escutando na porta " + port);
 

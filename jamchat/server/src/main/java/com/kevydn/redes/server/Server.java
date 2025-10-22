@@ -98,6 +98,10 @@ public class Server {
 
     private static int createJamPort() {
         // TODO isso aqui basta? talvez ter um comando para ver se a porta esta em uso e pegar um outro valor
-        return jams.values().stream().sorted().toList().getLast() + 1;
+        // Ler default UDP port de args
+        if (jams.isEmpty()) return 4000;
+
+        // Vai criar portas novas para cada streaming de jam, 4001, 4002, 4003, etc...
+        return jams.values().stream().sorted().toList().get(jams.size()) + 1;
     }
 }

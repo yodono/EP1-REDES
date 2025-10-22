@@ -1,36 +1,39 @@
 package com.kevydn.redes.server.audio;
 
+import com.kevydn.redes.server.Server;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class AudioStreamer implements Runnable {
     private final int CHUNK_SIZE = 4096; // tentativa de reduzir ruido aumentando o buffer (era 1024)
-    private final String filePath;
+    private final String songName;
     private final int port;
 
-    public AudioStreamer(String filePath, int port) {
-        this.filePath = filePath;
+    public AudioStreamer(String songName, int port) {
+        this.songName = songName;
         this.port = port;
     }
 
     @Override
     public void run() {
-        try (DatagramSocket socket = new DatagramSocket();
-             InputStream rawAudioStream = getClass().getClassLoader().getResourceAsStream(filePath)
-        ) {
-            if (rawAudioStream == null) {
-                System.err.println("Arquivo não encontrado: " + filePath);
-                return;
-            }
+        String filePath = "resources/audio/songs/" + songName;
 
+        File file = new File( filePath);
+        if (!file.exists()) {
+            System.err.println("Arquivo não encontrado: " + filePath);
+            return;
+        }
+
+        try (DatagramSocket socket = new DatagramSocket();
+             InputStream rawAudioStream = new FileInputStream(file)
+        ) {
             InetAddress clientAddress = InetAddress.getByName("localhost");
 
             // mark/reset erro com InputStream direto, usando o BufferedInputStream resolve
@@ -61,6 +64,8 @@ public class AudioStreamer implements Runnable {
             System.out.println("Streaming de audio finalizado.");
         } catch (IOException | UnsupportedAudioFileException | InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            Server.removeJam(songName);
         }
     }
 }

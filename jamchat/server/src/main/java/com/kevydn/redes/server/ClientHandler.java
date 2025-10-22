@@ -20,6 +20,7 @@
         private PrintWriter out;
         private BufferedReader in;
         private String username;
+        private String jam;
 
         public ClientHandler(Socket socket) {
             this.clientSocket = socket;
@@ -56,6 +57,10 @@
                         Server.broadcastMessage("/msg " + logoutMessage, this);
                     }
 
+                    if (jam != null) {
+                        Server.removeClientFromJam(jam, username);
+                    }
+
                     // Fecha os recursos
                     stop();
                 } catch (IOException e) {
@@ -81,4 +86,6 @@
 
         public void setUsername(String username) { this.username = username; }
         public String getUsername() { return username; }
+
+        public void setJam(String songName) { this.jam = songName; }
     }

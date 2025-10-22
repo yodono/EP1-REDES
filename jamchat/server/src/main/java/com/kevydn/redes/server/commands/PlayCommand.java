@@ -4,6 +4,7 @@ import com.kevydn.redes.protocol.Command;
 import com.kevydn.redes.protocol.MessageObserver;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
+import com.kevydn.redes.server.ClientHandler;
 import com.kevydn.redes.server.Server;
 import com.kevydn.redes.server.audio.AudioStreamer;
 
@@ -28,6 +29,11 @@ public class PlayCommand implements Command {
             return;
         }
 
+        // TODO se ja tiver tocando uma musica para esse cliente, desconectar e tocar a outra
+
+        Server.connectClientToJam(songName, ctx.getUsername());
+        ClientHandler clientHandler = (ClientHandler) ctx;
+        clientHandler.setJam(songName);
         Server.addJam(songName);
         int port = Server.getJamPort(songName);
         new Thread(new AudioStreamer(songName, port)).start();

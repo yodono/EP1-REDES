@@ -47,7 +47,7 @@ public class AudioStreamer implements Runnable {
             byte[] buffer = new byte[CHUNK_SIZE];
             int bytesRead;
 
-            while ((bytesRead = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
+            while (!Server.getJamClients(songName).isEmpty() && (bytesRead = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
                 DatagramPacket packet = new DatagramPacket(buffer, bytesRead, clientAddress, port);
                 socket.send(packet);
 

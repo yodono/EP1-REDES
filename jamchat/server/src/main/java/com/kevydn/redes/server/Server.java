@@ -3,7 +3,7 @@ package com.kevydn.redes.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,6 +21,8 @@ public class Server {
 
     // (songName, port)
     private static final Map<String, Integer> jams = new ConcurrentHashMap<>();
+    // (songName, clients)
+    private static final Map<String, Set<String>> jamClients = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -103,5 +105,25 @@ public class Server {
 
         // Vai criar portas novas para cada streaming de jam, 4001, 4002, 4003, etc...
         return jams.values().stream().sorted().toList().get(jams.size() - 1) + 1;
+    }
+
+    public static void connectClientToJam(String songName, String username) {
+        if (jamClients.containsKey(songName)) {
+            jamClients.get(songName).add(username);
+            return;
+        }
+
+        Set<String> connectedClients = new HashSet<>();
+        connectedClients.add(username);
+        jamClients.put(songName, connectedClients);
+    }
+
+    public static void removeClientFromJam(String songName, String username) {
+        jamClients.get(songName).remove(username);
+    }
+
+    public static List<String> getJamClients(String songName) {
+        if (jamClients.isEmpty() || jamClients.get(songName) == null) return Collections.emptyList();
+        return jamClients.get(songName).stream().toList();
     }
 }

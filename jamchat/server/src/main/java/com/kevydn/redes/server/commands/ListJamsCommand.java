@@ -30,11 +30,13 @@ public class ListJamsCommand implements Command {
                 for (File song : songs) {
                     String songName = song.getName();
                     boolean isPlaying = Server.hasJam(songName);
+                    int connectedCount = Server.getJamClients(songName).size();
 
                     sb.append(" - ")
                             .append(songName)
                             .append(" - ")
-                            .append(isPlaying ? "(tocando)" : "(não tocando)")
+                            .append(isPlaying ? "(tocando) - " : "(não tocando)")
+                            .append(isPlaying ? connectedCount + " escutando" : "")
                             .append("\\n");
                 }
             }

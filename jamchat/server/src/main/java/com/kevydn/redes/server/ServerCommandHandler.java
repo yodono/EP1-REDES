@@ -14,6 +14,7 @@ public class ServerCommandHandler extends CommandHandler {
     @Override
     protected void registerCommands() {
         registry.register(new LoginCommand());
+        registry.register(new LogoutCommand());
         registry.register(new MsgAllCommand());
         registry.register(new MsgJamCommand());
         registry.register(new MsgPrivateCommand());

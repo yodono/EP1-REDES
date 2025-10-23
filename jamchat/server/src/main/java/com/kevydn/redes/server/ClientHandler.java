@@ -52,13 +52,6 @@
                     // Informa a todos que o usuário saiu
                     if (username != null) {
                         Server.removeClient(username);
-                        String logoutMessage = username + " saiu do chat.";
-                        System.out.println(">>> " + logoutMessage);
-                        Server.broadcastMessage("/msg " + logoutMessage, this);
-                    }
-
-                    if (jam != null) {
-                        Server.removeClientFromJam(jam, username);
                     }
 
                     // Fecha os recursos

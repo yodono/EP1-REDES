@@ -17,9 +17,8 @@ public class ClientHeadless implements MessageObserver {
         Scanner scanner = new Scanner(System.in);
         CommandHandler clientHandler = new ClientCommandHandler(network);
 
-        while (true) {
+        while (!network.isClosed()) {
             String message = scanner.nextLine();
-            if (message.equalsIgnoreCase("/sair")) break;
             clientHandler.handle(message);
             network.send(message);
         }

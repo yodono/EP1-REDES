@@ -6,19 +6,19 @@ import com.kevydn.redes.protocol.MessageObserver;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
 
-public class LoginOKCommand implements Command {
+public class LogoutOKCommand implements Command {
 
     @Override
-    public String name() { return "/loginok"; }
+    public String name() { return "/logoutok"; }
 
     @Override
-    public String description() { return "Indica que login foi realizado com sucesso."; }
+    public String description() { return "Indica que logout foi realizado com sucesso."; }
 
     @Override
     public void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver messageObserver) {
-        String username = cmd.arg(0);
         ClientNetwork client = (ClientNetwork) ctx;
-        client.setUsername(username);
+        client.setUsername(null);
+        client.close();
     }
 
     @Override

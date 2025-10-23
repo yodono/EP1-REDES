@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Server {
     // TODO receber porta por args
     // Porta em que o servidor ficará escutando.
-    private static final int PORT = 12345;
+    private static final int PORT = 12346;
 
     // (username, handler)
     private static final Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
@@ -58,9 +58,18 @@ public class Server {
      * @param username O nome de usuário a ser removido.
      */
     public static void removeClient(String username) {
-        if (username != null) {
-            clients.remove(username);
-        }
+        if (username == null) return;
+
+        ClientHandler clientHandler = clients.get(username);
+        String jam = clientHandler.getJam();
+
+        clients.remove(username);
+        String logoutMessage = username + " saiu do chat.";
+        System.out.println(">>> " + logoutMessage);
+        Server.broadcastMessage("/msg " + logoutMessage, null);
+
+        if (jam == null) return;
+        Server.removeClientFromJam(jam, username);
     }
 
     public static ClientHandler getClient(String username) {

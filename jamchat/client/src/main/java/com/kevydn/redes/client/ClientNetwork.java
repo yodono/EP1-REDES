@@ -42,6 +42,7 @@ public class ClientNetwork implements NetworkContext {
 
     public void close() {
         try {
+            if (isClosed()) return;
             if (socket != null) socket.close();
             if (in != null) in.close();
             if (out != null) out.close();
@@ -52,4 +53,7 @@ public class ClientNetwork implements NetworkContext {
 
     public void setUsername(String username) { this.username = username; }
     public String getUsername() { return username; }
+    public boolean isClosed() {
+        return this.socket.isClosed();
+    }
 }

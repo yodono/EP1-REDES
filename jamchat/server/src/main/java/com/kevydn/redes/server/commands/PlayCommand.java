@@ -24,16 +24,24 @@ public class PlayCommand implements Command {
             return;
         }
 
+        ClientHandler clientHandler = (ClientHandler) ctx;
+        if (songName.equals(clientHandler.getJam())) {
+            ctx.send("/msg Já está tocando - " + songName);
+        }
+
+        // se ja tiver tocando uma musica para esse cliente, desconectar e tocar a outra
+        if (Server.getJamClients(clientHandler.getJam()).contains(clientHandler.getUsername())) {
+            Server.removeClientFromJam(clientHandler.getJam(), ctx.getUsername());
+        }
+
+        Server.connectClientToJam(songName, clientHandler.getUsername());
+        clientHandler.setJam(songName);
+
         if (Server.hasJam(songName)) {
             ctx.send("/join_jam " + Server.getJamPort(songName));
             return;
         }
 
-        // TODO se ja tiver tocando uma musica para esse cliente, desconectar e tocar a outra
-
-        Server.connectClientToJam(songName, ctx.getUsername());
-        ClientHandler clientHandler = (ClientHandler) ctx;
-        clientHandler.setJam(songName);
         Server.addJam(songName);
         int port = Server.getJamPort(songName);
         new Thread(new AudioStreamer(songName, port)).start();

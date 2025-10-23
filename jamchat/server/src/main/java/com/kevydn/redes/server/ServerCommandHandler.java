@@ -3,11 +3,7 @@ package com.kevydn.redes.server;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.ParsedCommand;
-import com.kevydn.redes.server.commands.HelpCommand;
-import com.kevydn.redes.server.commands.LoginCommand;
-import com.kevydn.redes.server.commands.MsgCommand;
-import com.kevydn.redes.server.commands.PlayCommand;
-import com.kevydn.redes.server.commands.ListJamsCommand;
+import com.kevydn.redes.server.commands.*;
 
 public class ServerCommandHandler extends CommandHandler {
 
@@ -18,7 +14,9 @@ public class ServerCommandHandler extends CommandHandler {
     @Override
     protected void registerCommands() {
         registry.register(new LoginCommand());
-        registry.register(new MsgCommand());
+        registry.register(new MsgAllCommand());
+        registry.register(new MsgJamCommand());
+        registry.register(new MsgPrivateCommand());
         registry.register(new PlayCommand());
         registry.register(new ListJamsCommand());
         registry.register(new HelpCommand(registry));

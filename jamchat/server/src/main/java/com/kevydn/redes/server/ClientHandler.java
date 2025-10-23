@@ -88,4 +88,5 @@
         public String getUsername() { return username; }
 
         public void setJam(String songName) { this.jam = songName; }
+        public String getJam() { return this.jam; }
     }

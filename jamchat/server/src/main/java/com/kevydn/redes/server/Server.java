@@ -63,6 +63,10 @@ public class Server {
         }
     }
 
+    public static ClientHandler getClient(String username) {
+        return clients.get(username);
+    }
+
     /**
      * Encaminha uma mensagem para todos os clientes conectados, exceto para o remetente.
      * @param message A mensagem a ser transmitida.
@@ -122,8 +126,8 @@ public class Server {
         jamClients.get(songName).remove(username);
     }
 
-    public static List<String> getJamClients(String songName) {
-        if (jamClients.isEmpty() || jamClients.get(songName) == null) return Collections.emptyList();
-        return jamClients.get(songName).stream().toList();
+    public static Set<String> getJamClients(String songName) {
+        if (jamClients.isEmpty() || jamClients.get(songName) == null) return Set.of();
+        return jamClients.get(songName);
     }
 }

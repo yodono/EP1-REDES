@@ -5,29 +5,33 @@ import com.kevydn.redes.protocol.MessageObserver;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.ParsedCommand;
 import com.kevydn.redes.server.ClientHandler;
-import com.kevydn.redes.server.Server;
 
-public class MsgCommand implements Command {
+public abstract class MsgCommand implements Command {
 
-    @Override
-    public String name() { return "/all"; }
+    protected String formatMessage(ClientHandler sender, String msg, String scope) {
+        StringBuilder sb = new StringBuilder("/msg ");
 
-    @Override
-    public String description() { return "Manda uma mensagem para todos: /all <mensagem>"; }
-
-    @Override
-    public void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver messageObserver) {
-        String msg = cmd.arg(0);
-        if (msg == null || msg.isBlank()) {
-            ctx.send("/msg Uso: /all <mensagem>");
-            return;
+        switch (scope.toLowerCase()) {
+            case "all" -> sb.append("[ALL]");
+            case "jam" -> sb.append("[JAM]");
+            default -> sb.append("[").append(scope).append("]");
         }
 
-        ClientHandler client = (ClientHandler) ctx;
-        String broadcastMessage = "/msg [" + client.getUsername() + "]: " + msg;
-        Server.broadcastMessage(broadcastMessage, null); // TODO solucao paliativa, implementar isso no cliente (tentativa de envio de mensagem)
+        sb.append(" ").append(sender.getUsername()).append(": ").append(msg);
+        return sb.toString();
     }
 
-    @Override
-    public int expectedArgs() { return 1; }
+
+    protected String validateMessage(ParsedCommand cmd, NetworkContext ctx) {
+        String msg = cmd.arg(0);
+        if (msg == null || msg.isBlank()) {
+            ctx.send("/msg Uso incorreto do comando.");
+            return null;
+        }
+        return msg;
+    }
+
+    public abstract int expectedArgs();
+
+    public abstract void execute(ParsedCommand cmd, NetworkContext ctx, MessageObserver messageObserver);
 }

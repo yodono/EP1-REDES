@@ -7,6 +7,7 @@
     import java.io.IOException;
     import java.io.InputStreamReader;
     import java.io.PrintWriter;
+    import java.net.InetAddress;
     import java.net.Socket;
     import java.net.SocketException;
 
@@ -79,6 +80,9 @@
 
         public void setUsername(String username) { this.username = username; }
         public String getUsername() { return username; }
+        public InetAddress getInetAddress() {
+            return this.clientSocket.getInetAddress();
+        }
 
         public void setJam(String songName) { this.jam = songName; }
         public String getJam() { return this.jam; }

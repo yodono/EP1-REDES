@@ -34,8 +34,6 @@ public class AudioStreamer implements Runnable {
         try (DatagramSocket socket = new DatagramSocket();
              InputStream rawAudioStream = new FileInputStream(file)
         ) {
-            InetAddress clientAddress = InetAddress.getByName("localhost");
-
             // mark/reset erro com InputStream direto, usando o BufferedInputStream resolve
             BufferedInputStream bufferedStream = new BufferedInputStream(rawAudioStream);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedStream);
@@ -48,10 +46,15 @@ public class AudioStreamer implements Runnable {
             int bytesRead;
 
             while (!Server.getJamClients(songName).isEmpty() && (bytesRead = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
-                DatagramPacket packet = new DatagramPacket(buffer, bytesRead, clientAddress, port);
-                socket.send(packet);
 
-                System.out.println("Chunk enviado de tamanho: " + bytesRead);
+                // manda pactoe para todos usuarios conectados na jam
+                for (String username : Server.getJamClients(songName)) {
+                    InetAddress clientAddress = Server.getClient(username).getInetAddress();
+                    DatagramPacket packet = new DatagramPacket(buffer, bytesRead, clientAddress, port);
+                    socket.send(packet);
+                }
+
+                // System.out.println("Chunk enviado de tamanho: " + bytesRead);
 
                 // Precisamos dar sleep na thread para não encher o buffer do cliente muito rápido
                 // E parear a taxa de reprodução do áudio com a taxa de envio?? not sure

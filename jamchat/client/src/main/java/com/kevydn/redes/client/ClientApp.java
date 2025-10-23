@@ -5,9 +5,11 @@ import com.kevydn.redes.client.gui.ClientUIManager;
 // Orquestrador do cliente
 public class ClientApp {
     public static void main(String[] args) {
-        boolean guiMode = args.length == 0 || !args[0].equals("--headless");
+        String serverIp = args[0];
+        int serverPort = Integer.parseInt(args[1]);
+        boolean guiMode = args.length == 2 || !args[2].equals("--headless");
 
-        ClientNetwork network = new ClientNetwork("localhost", 12346);
+        ClientNetwork network = new ClientNetwork(serverIp, serverPort);
 
         try {
 

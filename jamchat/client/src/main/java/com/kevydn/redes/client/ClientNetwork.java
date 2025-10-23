@@ -1,6 +1,5 @@
 package com.kevydn.redes.client;
 
-import com.kevydn.redes.protocol.MessageObserver;
 import com.kevydn.redes.protocol.NetworkContext;
 import com.kevydn.redes.protocol.CommandHandler;
 

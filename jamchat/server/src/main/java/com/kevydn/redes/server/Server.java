@@ -3,7 +3,8 @@ package com.kevydn.redes.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -12,21 +13,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * para cada cliente conectado.
  */
 public class Server {
-    // TODO receber porta por args
-    // Porta em que o servidor ficará escutando.
-    private static final int PORT = 12346;
+
+    // porta de jam padrão para streaming UDP
+    // pode ser sobrescrita por args
+    private static int defaultJamPort = 4000;
 
     // (username, handler)
     private static final Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
-
     // (songName, port)
     private static final Map<String, Integer> jams = new ConcurrentHashMap<>();
     // (songName, clients)
     private static final Map<String, Set<String>> jamClients = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Servidor de chat iniciando na porta " + PORT + "...");
+        int port = Integer.parseInt(args[0]);
+        if (args.length == 2 && args[1] != null) defaultJamPort = Integer.parseInt(args[1]);
+
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Servidor de chat iniciando na porta " + port + "...");
 
             while (true) {
                 // O método accept() bloqueia a execução até que um cliente se conecte.
@@ -114,7 +118,7 @@ public class Server {
     private static int createJamPort() {
         // TODO isso aqui basta? talvez ter um comando para ver se a porta esta em uso e pegar um outro valor
         // Ler default UDP port de args
-        if (jams.isEmpty()) return 4000;
+        if (jams.isEmpty()) return defaultJamPort;
 
         // Vai criar portas novas para cada streaming de jam, 4001, 4002, 4003, etc...
         return jams.values().stream().sorted().toList().get(jams.size() - 1) + 1;
@@ -126,7 +130,8 @@ public class Server {
             return;
         }
 
-        Set<String> connectedClients = new HashSet<>();
+        // manter lista thread-safe
+        Set<String> connectedClients = ConcurrentHashMap.newKeySet();
         connectedClients.add(username);
         jamClients.put(songName, connectedClients);
     }
@@ -136,7 +141,7 @@ public class Server {
     }
 
     public static Set<String> getJamClients(String songName) {
-        if (jamClients.isEmpty() || jamClients.get(songName) == null) return Set.of();
+        if (songName == null || jamClients.isEmpty() || jamClients.get(songName) == null) return ConcurrentHashMap.newKeySet();
         return jamClients.get(songName);
     }
 }

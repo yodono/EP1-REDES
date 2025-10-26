@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * Controla a interface gráfica do cliente.
+ * Trecho retirado e adaptado da conversa com ChatGPT: pág 55/172 do anexo ChatGPT Data Export - redes.pdf.
  */
 public class ClientUIManager implements MessageObserver {
     private final ClientNetwork network;

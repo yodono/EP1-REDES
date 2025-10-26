@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 
+// Trecho retirado e adaptado da conversa com ChatGPT: pág 61/172 do anexo ChatGPT Data Export - redes.pdf.
 public class BasicWindow {
     private final ClientUIManager ui;
     private JTextArea chatArea;

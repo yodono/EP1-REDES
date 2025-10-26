@@ -5,8 +5,11 @@ package com.kevydn.redes.protocol;
  */
 public abstract class CommandHandler {
 
+    // Guarda comandos aceitos por esse handler
     protected final CommandRegistry registry;
+    // Guarda network context para ser utilizado nos comandos
     protected final NetworkContext networkContext;
+    // Guarda interface MessageObserver para reagir a mensagens trocadas
     protected final MessageObserver messageObserver;
 
     public CommandHandler(NetworkContext networkContext) {
@@ -23,6 +26,7 @@ public abstract class CommandHandler {
         registerCommands();
     }
 
+    // Comando centralizado que interpreta a sintaxe do comando, pega no registro, analisa pre-condições e executa o comando
     public void handle(String input) {
         ParsedCommand cmd = CommandParser.parse(input, registry);
         Command command = registry.get(cmd.name());

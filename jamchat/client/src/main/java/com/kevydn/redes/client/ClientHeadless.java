@@ -5,7 +5,7 @@ import com.kevydn.redes.protocol.MessageObserver;
 
 import java.util.Scanner;
 
-// Modo terminal (sem interface gráfica).
+// Modo terminal (sem interface gráfica). Utilizado para debug em desenvolvimento.
 public class ClientHeadless implements MessageObserver {
     private final ClientNetwork network;
 

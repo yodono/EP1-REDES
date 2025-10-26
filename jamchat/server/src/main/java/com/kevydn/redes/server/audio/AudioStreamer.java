@@ -11,6 +11,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+// Trecho retirado e adaptado da conversa com ChatGPT: pág 83/172 do anexo ChatGPT Data Export - redes.pdf.
 public class AudioStreamer implements Runnable {
     private final int CHUNK_SIZE = 4096; // tentativa de reduzir ruido aumentando o buffer (era 1024)
     private final String songName;

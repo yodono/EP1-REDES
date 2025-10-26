@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
+// Trecho retirado e adaptado da conversa com ChatGPT: pág 71/172 do anexo ChatGPT Data Export - redes.pdf.
 public class AudioStreamPlayer implements Runnable {
     private final int CHUNK_SIZE = 4096; // tentativa de reduzir ruido aumentando o buffer (era 1024)
     private final int port;

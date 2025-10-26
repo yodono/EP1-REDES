@@ -5,6 +5,7 @@ import com.kevydn.redes.protocol.CommandHandler;
 import com.kevydn.redes.protocol.ParsedCommand;
 import com.kevydn.redes.server.commands.*;
 
+// Trecho retirado e adaptado da conversa com ChatGPT: pág 96/172 do anexo ChatGPT Data Export - redes.pdf.
 public class ServerCommandHandler extends CommandHandler {
 
     public ServerCommandHandler(NetworkContext ctx) {

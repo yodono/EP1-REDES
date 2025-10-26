@@ -3,6 +3,7 @@ package com.kevydn.redes.client;
 import com.kevydn.redes.client.gui.ClientUIManager;
 
 // Orquestrador do cliente
+// Trecho retirado e adaptado da conversa com ChatGPT: pág 65/172 do anexo ChatGPT Data Export - redes.pdf.
 public class ClientApp {
     public static void main(String[] args) {
         String serverIp = args[0];

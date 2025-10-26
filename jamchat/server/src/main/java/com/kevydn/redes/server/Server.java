@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Classe principal do servidor de chat.
  * Responsável por aguardar conexões de clientes e criar uma nova thread
  * para cada cliente conectado.
+ * Trecho retirado e adaptado do tutorial: https://www.baeldung.com/a-guide-to-java-sockets
  */
 public class Server {
 

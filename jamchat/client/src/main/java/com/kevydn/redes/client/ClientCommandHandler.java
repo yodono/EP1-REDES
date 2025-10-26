@@ -7,6 +7,7 @@ import com.kevydn.redes.protocol.ParsedCommand;
 /**
  * TODO sem uso por enquanto, ja que mudamos a logica de play. Remover?
  * Interpreta e executa comandos do cliente, para o cliente (comandos locais).
+ * p. ex. um /clear que limpa o chat apenas localmente
  * Usa a mesma infraestrutura de protocolo do servidor.
  */
 public class ClientCommandHandler extends CommandHandler {

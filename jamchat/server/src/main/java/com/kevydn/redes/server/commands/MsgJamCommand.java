@@ -34,7 +34,7 @@ public class MsgJamCommand extends MsgCommand {
         // TODO reutilizar broadcast para dar match nesses valores
         for (String username : jamClients) {
             ClientHandler receiver = Server.getClient(username);
-            if (receiver != null && receiver != sender) {
+            if (receiver != null) {
                 receiver.send(formatted);
             }
         }

@@ -23,6 +23,7 @@ public class MsgAllCommand extends MsgCommand {
         String formatted = formatMessage(sender, msg, "all");
 
         Server.broadcastMessage(formatted, sender);
+        sender.send(formatted);
     }
 
     @Override

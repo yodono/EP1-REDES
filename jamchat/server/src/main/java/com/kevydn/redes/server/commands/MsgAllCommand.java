@@ -21,9 +21,8 @@ public class MsgAllCommand extends MsgCommand {
 
         ClientHandler sender = (ClientHandler) ctx;
         String formatted = formatMessage(sender, msg, "all");
-
-        Server.broadcastMessage(formatted, sender);
         sender.send(formatted);
+        Server.broadcastMessage(formatted, sender);
     }
 
     @Override
